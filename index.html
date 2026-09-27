@@ -38,7 +38,6 @@
             color: var(--text-light);
         }
 
-        /* ========== APP CONTAINER ========== */
         .app-container {
             width: 100%;
             max-width: 1400px;
@@ -60,13 +59,11 @@
             border-radius: 36px;
             transition: opacity 0.5s ease, visibility 0.5s;
         }
-
         .welcome-screen.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-
         .welcome-card {
             background: rgba(26, 16, 40, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.3);
@@ -77,7 +74,6 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), var(--shadow-glow);
         }
-
         .welcome-avatar {
             width: 120px;
             height: 120px;
@@ -87,30 +83,25 @@
             border: 3px solid var(--primary);
             box-shadow: 0 0 30px var(--primary-glow);
         }
-
         .welcome-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .welcome-card h2 {
             font-size: 1.8rem;
             font-weight: 400;
             margin-bottom: 8px;
         }
-
         .welcome-card h2 .char-name {
             color: var(--accent-cyan);
             font-weight: 600;
         }
-
         .welcome-card p {
             color: var(--text-dim);
             margin-bottom: 24px;
             font-size: 1rem;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
@@ -123,7 +114,6 @@
             box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
             transition: var(--transition);
         }
-
         .btn-primary:hover {
             transform: scale(1.03);
             box-shadow: 0 12px 32px rgba(168, 85, 247, 0.7);
@@ -138,7 +128,6 @@
             opacity: 1;
             transition: opacity 0.3s;
         }
-
         .main-layout.hidden {
             display: none;
         }
@@ -157,7 +146,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .character-wrapper {
             position: relative;
             width: 100%;
@@ -168,7 +156,6 @@
             justify-content: center;
             margin-bottom: 16px;
         }
-
         .character-glow {
             position: absolute;
             inset: -5%;
@@ -178,7 +165,6 @@
             z-index: 0;
             transition: opacity 0.6s, background 0.6s;
         }
-
         .character-img {
             width: 100%;
             height: 100%;
@@ -186,15 +172,19 @@
             border-radius: 36px;
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
             z-index: 1;
-            transition: transform 0.3s, box-shadow 0.4s, filter 0.4s;
+            opacity: 1;
+            transition: opacity 0.25s ease, transform 0.3s ease,
+                        box-shadow 0.4s ease, filter 0.4s ease;
             animation: floatIdle 5s ease-in-out infinite;
+            will-change: opacity, transform;
         }
-
+        .character-img.fading {
+            opacity: 0;
+        }
         @keyframes floatIdle {
             0%, 100% { transform: translateY(0px) scale(1); }
             50% { transform: translateY(-6px) scale(1.005); }
         }
-
         .character-img.talking {
             animation: talkFloat 1.2s ease-in-out infinite;
             box-shadow: 0 0 50px var(--primary-glow), 0 20px 40px -10px black;
@@ -204,16 +194,14 @@
             30% { transform: scale(1.02) translateY(-4px); }
             70% { transform: scale(1.01) translateY(2px); }
         }
-
         .character-img.thinking {
             animation: thinkPulse 1.8s ease-in-out infinite;
             filter: brightness(1.1) saturate(1.2);
         }
         @keyframes thinkPulse {
-            0%, 100% { transform: scale(1); opacity: 0.95; }
-            50% { transform: scale(0.99); opacity: 1; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.99); }
         }
-
         .character-img.error {
             filter: hue-rotate(-20deg) brightness(0.9);
             box-shadow: 0 0 40px rgba(255, 80, 80, 0.6);
@@ -240,7 +228,6 @@
         .p1 { top: 10%; left: 5%; animation-duration: 9s; }
         .p2 { bottom: 15%; right: 8%; width: 10px; height: 10px; background: var(--accent-cyan); animation-duration: 11s; }
         .p3 { top: 40%; right: 12%; width: 4px; height: 4px; animation-duration: 7s; }
-
         @keyframes particleFloat {
             0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
             100% { transform: translate(20px, -30px) scale(1.5); opacity: 0.5; }
@@ -259,8 +246,8 @@
             letter-spacing: 0.3px;
             margin-top: 8px;
             z-index: 5;
+            transition: border-color 0.3s ease;
         }
-
         .status-dot {
             width: 10px;
             height: 10px;
@@ -269,7 +256,6 @@
             box-shadow: 0 0 12px #4ade80;
             transition: background 0.3s, box-shadow 0.3s;
         }
-
         .status-text {
             color: var(--text-light);
             font-weight: 500;
@@ -301,7 +287,6 @@
         .audio-wave span:nth-child(3) { animation-delay: 0.3s; height: 24px; }
         .audio-wave span:nth-child(4) { animation-delay: 0.45s; height: 16px; }
         .audio-wave span:nth-child(5) { animation-delay: 0.6s; height: 10px; }
-
         @keyframes waveBounce {
             0%, 100% { transform: scaleY(0.6); opacity: 0.6; }
             50% { transform: scaleY(1.4); opacity: 1; }
@@ -340,7 +325,6 @@
             overflow: hidden;
             box-shadow: 0 20px 40px -15px black, inset 0 0 30px rgba(168, 85, 247, 0.05);
         }
-
         .chat-header {
             padding: 18px 24px;
             border-bottom: 1px solid rgba(168, 85, 247, 0.2);
@@ -369,13 +353,8 @@
             gap: 14px;
             scroll-behavior: smooth;
         }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
         .chat-messages::-webkit-scrollbar-thumb {
             background: var(--secondary);
             border-radius: 10px;
@@ -394,7 +373,6 @@
             from { opacity: 0; transform: translateY(10px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .message.user {
             align-self: flex-end;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -402,7 +380,6 @@
             border-bottom-right-radius: 6px;
             box-shadow: 0 6px 14px rgba(124, 58, 237, 0.3);
         }
-
         .message.ai {
             align-self: flex-start;
             background: rgba(45, 30, 65, 0.9);
@@ -421,13 +398,8 @@
             font-size: 0.9rem;
             font-style: italic;
         }
-        .typing-indicator.visible {
-            display: flex;
-        }
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-        }
+        .typing-indicator.visible { display: flex; }
+        .typing-dots { display: flex; gap: 4px; }
         .typing-dots span {
             width: 8px;
             height: 8px;
@@ -437,7 +409,6 @@
         }
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
         @keyframes typingBounce {
             0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
             30% { transform: translateY(-6px); opacity: 1; }
@@ -450,7 +421,6 @@
             border-top: 1px solid rgba(168, 85, 247, 0.2);
             background: rgba(15, 10, 22, 0.5);
         }
-
         #messageInput {
             flex: 1;
             background: rgba(0, 0, 0, 0.3);
@@ -473,7 +443,6 @@
             color: var(--text-dim);
             opacity: 0.6;
         }
-
         .send-btn {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
@@ -500,7 +469,6 @@
             cursor: not-allowed;
             box-shadow: none;
         }
-
         .input-hint {
             font-size: 0.7rem;
             color: var(--text-dim);
@@ -510,79 +478,35 @@
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 900px) {
-            .app-container {
-                height: auto;
-                max-height: none;
-            }
-            .main-layout {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            .character-panel {
-                padding: 20px 16px 16px;
-            }
-            .character-wrapper {
-                max-width: 280px;
-                aspect-ratio: 1/1;
-            }
-            .chat-panel {
-                min-height: 450px;
-            }
-            .welcome-card {
-                padding: 28px 22px;
-            }
+            .app-container { height: auto; max-height: none; }
+            .main-layout { grid-template-columns: 1fr; gap: 16px; }
+            .character-panel { padding: 20px 16px 16px; }
+            .character-wrapper { max-width: 280px; aspect-ratio: 1/1; }
+            .chat-panel { min-height: 450px; }
+            .welcome-card { padding: 28px 22px; }
         }
-
         @media (max-width: 480px) {
-            body {
-                padding: 8px;
-            }
-            .app-container {
-                border-radius: 24px;
-            }
-            .character-wrapper {
-                max-width: 220px;
-            }
-            .status-indicator {
-                font-size: 0.85rem;
-                padding: 6px 16px;
-            }
-            .chat-messages {
-                padding: 14px 12px;
-            }
-            .message {
-                max-width: 92%;
-                font-size: 0.9rem;
-                padding: 10px 14px;
-            }
-            .chat-input-area {
-                padding: 12px 12px 6px;
-            }
-            #messageInput {
-                padding: 12px 14px;
-                font-size: 0.9rem;
-            }
-            .send-btn {
-                width: 46px;
-                height: 46px;
-                font-size: 1.2rem;
-            }
-            .voice-toggle {
-                font-size: 0.8rem;
-                padding: 6px 16px;
-            }
+            body { padding: 8px; }
+            .app-container { border-radius: 24px; }
+            .character-wrapper { max-width: 220px; }
+            .status-indicator { font-size: 0.85rem; padding: 6px 16px; }
+            .chat-messages { padding: 14px 12px; }
+            .message { max-width: 92%; font-size: 0.9rem; padding: 10px 14px; }
+            .chat-input-area { padding: 12px 12px 6px; }
+            #messageInput { padding: 12px 14px; font-size: 0.9rem; }
+            .send-btn { width: 46px; height: 46px; font-size: 1.2rem; }
+            .voice-toggle { font-size: 0.8rem; padding: 6px 16px; }
         }
     </style>
 </head>
 <body>
-    <!-- MAIN APP CONTAINER -->
     <div class="app-container">
 
         <!-- WELCOME SCREEN -->
         <div id="welcomeScreen" class="welcome-screen">
             <div class="welcome-card">
                 <div class="welcome-avatar">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%231a1028'/%3E%3Ccircle cx='100' cy='100' r='70' fill='%237c3aed' opacity='0.3'/%3E%3Ctext x='100' y='115' font-family='Arial' font-size='40' fill='%23c084fc' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" alt="Zimelia" class="welcome-img">
+                    <img src="assets/happy.jpg" alt="Zimelia" class="welcome-img">
                 </div>
                 <h2>Hi! I'm <span class="char-name">Zimelia</span>.</h2>
                 <p>You can talk to me about anything.</p>
@@ -597,7 +521,7 @@
             <section class="character-panel">
                 <div class="character-wrapper">
                     <div class="character-glow"></div>
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='440' viewBox='0 0 400 440'%3E%3Crect width='400' height='440' fill='%231a1028' rx='36'/%3E%3Ccircle cx='200' cy='180' r='100' fill='%237c3aed' opacity='0.25'/%3E%3Ccircle cx='200' cy='180' r='70' fill='%23a855f7' opacity='0.3'/%3E%3Ctext x='200' y='210' font-family='Arial' font-size='80' fill='%23d8b4fe' text-anchor='middle' font-weight='bold'%3EZ%3C/text%3E%3Ctext x='200' y='330' font-family='Arial' font-size='22' fill='%23b9a8d4' text-anchor='middle'%3EZimelia%3C/text%3E%3C/svg%3E" alt="Zimelia character" class="character-img" id="characterImage">
+                    <img src="assets/idle.jpg" alt="Zimelia character" class="character-img" id="characterImage">
                     <div class="particle p1"></div>
                     <div class="particle p2"></div>
                     <div class="particle p3"></div>
@@ -643,83 +567,197 @@
     </div>
 
     <script>
-        /* ============================================
-           INTERACTIVE AI CHARACTER — ZIMELIA
+        /* ============================================================
+           ZIMELIA — Interactive AI Character
            Single-file version
-           ============================================ */
+           ============================================================ */
 
-        // ============================================
-        // 1. CHARACTER CONFIGURATION
-        // ============================================
+        /* ============================================================
+           1. CHARACTER CONFIGURATION
+           ============================================================ */
         const characterConfig = {
             name: "Zimelia",
             personality: "friendly, helpful, calm and slightly playful",
             greeting: "Hello! I'm Zimelia. How can I help you today?"
         };
 
-        // ============================================
-        // 2. DOM ELEMENTS
-        // ============================================
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const startChatBtn = document.getElementById('startChatBtn');
-        const mainLayout = document.getElementById('mainLayout');
-        const characterImage = document.getElementById('characterImage');
-        const statusText = document.getElementById('statusText');
-        const statusDot = document.querySelector('.status-dot');
-        const audioWave = document.getElementById('audioWave');
-        const voiceToggleBtn = document.getElementById('voiceToggleBtn');
-        const chatMessages = document.getElementById('chatMessages');
+        /* ============================================================
+           2. CHARACTER IMAGES  (all JPG, inside /assets)
+           ============================================================ */
+        const characterImages = {
+            scared:     "assets/scared.jpg",
+            happy:      "assets/happy.jpg",
+            thinking:   "assets/thinking.jpg",
+            confused:   "assets/confused.jpg",
+            sad:        "assets/sad.jpg",
+            embarrased: "assets/embarrased.jpg",   // keep this exact spelling
+            idle:       "assets/idle.jpg",
+            waiting:    "assets/waiting.jpg",
+            bored:      "assets/bored.jpg"
+        };
+
+        /* Preload every expression so switching feels instant */
+        Object.values(characterImages).forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        /* ============================================================
+           3. DOM ELEMENTS
+           ============================================================ */
+        const welcomeScreen   = document.getElementById('welcomeScreen');
+        const startChatBtn    = document.getElementById('startChatBtn');
+        const mainLayout      = document.getElementById('mainLayout');
+        const characterImage  = document.getElementById('characterImage');
+        const statusText      = document.getElementById('statusText');
+        const statusDot       = document.querySelector('.status-dot');
+        const audioWave       = document.getElementById('audioWave');
+        const voiceToggleBtn  = document.getElementById('voiceToggleBtn');
+        const chatMessages    = document.getElementById('chatMessages');
         const typingIndicator = document.getElementById('typingIndicator');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
+        const messageInput    = document.getElementById('messageInput');
+        const sendBtn         = document.getElementById('sendBtn');
 
-        // ============================================
-        // 3. STATE VARIABLES
-        // ============================================
-        let voiceEnabled = true;
-        let isProcessing = false;
-        let currentUtterance = null;
+        /* ============================================================
+           4. STATE
+           ============================================================ */
+        const NAME = characterConfig.name;
 
-        // ============================================
-        // 4. CHARACTER STATE SYSTEM
-        // ============================================
-        function setCharacterState(state) {
-            characterImage.classList.remove('talking', 'thinking', 'error');
-            audioWave.classList.remove('active');
+        const stateInfo = {
+            idle:       { text: 'Idle',                        color: '#4ade80' },
+            thinking:   { text: `${NAME} is thinking...`,      color: '#fbbf24' },
+            talking:    { text: `${NAME} is talking...`,       color: '#67e8f9' },
+            waiting:    { text: `${NAME} is waiting...`,       color: '#a78bfa' },
+            bored:      { text: `${NAME} is getting bored...`, color: '#f472b6' },
+            happy:      { text: `${NAME} is happy!`,           color: '#facc15' },
+            confused:   { text: `${NAME} is confused...`,      color: '#fb923c' },
+            sad:        { text: `${NAME} feels sad...`,        color: '#60a5fa' },
+            scared:     { text: `${NAME} is startled!`,        color: '#f87171' },
+            embarrased: { text: `${NAME} is embarrassed...`,   color: '#f9a8d4' },
+            error:      { text: 'Something went wrong',        color: '#f87171' }
+        };
 
-            switch (state) {
-                case 'idle':
-                    statusText.textContent = 'Idle';
-                    statusDot.style.background = '#4ade80';
-                    statusDot.style.boxShadow = '0 0 12px #4ade80';
-                    break;
-                case 'thinking':
-                    statusText.textContent = `${characterConfig.name} is thinking...`;
-                    statusDot.style.background = '#fbbf24';
-                    statusDot.style.boxShadow = '0 0 12px #fbbf24';
-                    characterImage.classList.add('thinking');
-                    break;
-                case 'talking':
-                    statusText.textContent = `${characterConfig.name} is talking...`;
-                    statusDot.style.background = '#67e8f9';
-                    statusDot.style.boxShadow = '0 0 12px #67e8f9';
-                    characterImage.classList.add('talking');
-                    audioWave.classList.add('active');
-                    break;
-                case 'error':
-                    statusText.textContent = 'Error — something went wrong';
-                    statusDot.style.background = '#f87171';
-                    statusDot.style.boxShadow = '0 0 12px #f87171';
-                    characterImage.classList.add('error');
-                    break;
-                default:
-                    statusText.textContent = 'Idle';
+        let currentState    = 'idle';
+        let currentImageKey = 'idle';   // HTML starts with idle.jpg
+
+        let voiceEnabled  = true;
+        let isProcessing  = false;
+        let isAIActive    = false;
+
+        /* Timers */
+        let imageSwapTimeout = null;
+        let responseTimer    = null;
+        let safetyTimer      = null;
+        let waitingTimer     = null;    // 2 min
+        let boredTimer       = null;    // 4 min
+
+        const INACTIVITY_WAITING_MS = 2 * 60 * 1000;
+        const INACTIVITY_BORED_MS   = 4 * 60 * 1000;
+
+        /* ============================================================
+           5. IMAGE SWAPPING (smooth cross-fade)
+           ============================================================ */
+        function setCharacterImage(imageKey) {
+            const src = characterImages[imageKey] || characterImages.idle;
+
+            if (currentImageKey === imageKey) return;
+            currentImageKey = imageKey;
+
+            clearTimeout(imageSwapTimeout);
+            characterImage.classList.add('fading');
+
+            imageSwapTimeout = setTimeout(() => {
+                let shown = false;
+                const show = () => {
+                    if (shown) return;
+                    shown = true;
+                    characterImage.classList.remove('fading');
+                    characterImage.onload  = null;
+                    characterImage.onerror = null;
+                };
+
+                characterImage.onload  = show;
+                characterImage.onerror = show;   // never leave invisible
+                characterImage.src = src;
+
+                if (characterImage.complete && characterImage.naturalWidth > 0) {
+                    requestAnimationFrame(show);
+                }
+            }, 240);
+        }
+
+        /* ============================================================
+           6. TALKING ANIMATION
+           ============================================================ */
+        function setTalking(on) {
+            if (on) {
+                characterImage.classList.add('talking');
+                audioWave.classList.add('active');
+            } else {
+                characterImage.classList.remove('talking');
+                audioWave.classList.remove('active');
             }
         }
 
-        // ============================================
-        // 5. CHAT FUNCTIONS
-        // ============================================
+        /* ============================================================
+           7. SET CHARACTER STATE
+           ============================================================ */
+        function setCharacterState(state) {
+            let key      = state;
+            let imageKey = state;
+
+            if (key === 'error') {
+                imageKey = 'idle';            // no error.jpg
+            } else if (key === 'talking') {
+                imageKey = 'happy';           // no talking.jpg
+            } else if (!characterImages[key]) {
+                key      = 'idle';
+                imageKey = 'idle';
+            }
+
+            currentState = key;
+
+            setCharacterImage(imageKey);
+
+            characterImage.classList.remove('thinking', 'error');
+            if (key === 'thinking') characterImage.classList.add('thinking');
+            if (key === 'error')    characterImage.classList.add('error');
+
+            if (key === 'talking') {
+                setTalking(true);
+            } else {
+                setTalking(false);
+            }
+
+            const info = stateInfo[key] || stateInfo.idle;
+            statusText.textContent     = info.text;
+            statusDot.style.background = info.color;
+            statusDot.style.boxShadow  = `0 0 12px ${info.color}`;
+        }
+
+        /* ============================================================
+           8. INACTIVITY SYSTEM
+           ============================================================ */
+        function resetInactivityTimer() {
+            clearTimeout(waitingTimer);
+            clearTimeout(boredTimer);
+
+            if (!isAIActive && (currentState === 'waiting' || currentState === 'bored')) {
+                setCharacterState('idle');
+            }
+
+            waitingTimer = setTimeout(() => {
+                if (!isAIActive) setCharacterState('waiting');
+            }, INACTIVITY_WAITING_MS);
+
+            boredTimer = setTimeout(() => {
+                if (!isAIActive) setCharacterState('bored');
+            }, INACTIVITY_BORED_MS);
+        }
+
+        /* ============================================================
+           9. CHAT HELPERS
+           ============================================================ */
         function addMessage(text, sender) {
             const msgDiv = document.createElement('div');
             msgDiv.classList.add('message', sender);
@@ -729,115 +767,189 @@
         }
 
         function showTyping(visible) {
-            if (visible) {
-                typingIndicator.classList.add('visible');
-            } else {
-                typingIndicator.classList.remove('visible');
-            }
+            typingIndicator.classList.toggle('visible', visible);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // ============================================
-        // 6. AI RESPONSE GENERATOR (PLACEHOLDER)
-        // ============================================
+        function autoResizeInput() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+        }
+
+        /* ============================================================
+           10. AI RESPONSE GENERATOR  (placeholder)
+           ============================================================ */
         async function generateAIResponse(message) {
-            // ==========================================
-            // 🔌 AI API CONNECTION POINT
-            // ==========================================
-            // To connect a real AI:
-            // 1. Replace the placeholder below with a fetch() call to your backend.
-            // 2. Your backend should hold the API key and forward requests.
-            //
-            // Example:
-            // const response = await fetch('/api/chat', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ message, personality: characterConfig.personality })
-            // });
-            // const data = await response.json();
-            // return data.reply;
-            //
-            // NEVER expose secret API keys in frontend code.
-            // ==========================================
+            /* =========================================================
+               🔌 AI API CONNECTION POINT
+               =========================================================
+               Replace the placeholder below with a real request:
 
-            return new Promise((resolve) => {
+                 const res = await fetch('/api/chat', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({
+                         message: message,
+                         personality: characterConfig.personality
+                     })
+                 });
+                 const data = await res.json();
+                 return { text: data.reply, emotion: data.emotion || 'happy' };
+
+               ⚠  NEVER put secret API keys in frontend JavaScript.
+                  Put the key on your backend and call YOUR endpoint.
+               ========================================================= */
+
+            return new Promise(resolve => {
                 setTimeout(() => {
-                    const lower = message.toLowerCase();
-                    let reply = '';
-
-                    if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
-                        reply = `Hey there! I'm ${characterConfig.name}. It's lovely to hear from you.`;
-                    } else if (lower.includes('how are you')) {
-                        reply = `I'm wonderful, thank you! I'm always happy to chat. How are you doing?`;
-                    } else if (lower.includes('your name') || lower.includes('who are you')) {
-                        reply = `I'm ${characterConfig.name}, your AI companion. I'm here to talk about anything you like.`;
-                    } else if (lower.includes('help')) {
-                        reply = `Of course! I can chat with you about ideas, answer questions, or just keep you company. What's on your mind?`;
-                    } else if (lower.includes('bye') || lower.includes('goodbye')) {
-                        reply = `Goodbye! Come back anytime. I'll be right here. 💜`;
-                    } else {
-                        const fallbacks = [
-                            `That's interesting! Tell me more.`,
-                            `I see what you mean. What else is on your mind?`,
-                            `Thanks for sharing that with me. I'm listening.`,
-                            `Hmm, let me think about that... I'd love to hear more.`,
-                            `I'm here for you. What would you like to talk about?`
-                        ];
-                        reply = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-                    }
-
-                    resolve(reply);
+                    resolve(buildPlaceholderReply(message));
                 }, 800 + Math.random() * 600);
             });
         }
 
-        // ============================================
-        // 7. VOICE (SPEECH SYNTHESIS)
-        // ============================================
-        function speakText(text) {
-            if (!voiceEnabled) return;
-            if (!('speechSynthesis' in window)) return;
+        function buildPlaceholderReply(message) {
+            const lower = message.toLowerCase();
+
+            if (/\b(scary|scared|afraid|fear|terrified|ghost|monster|danger|nightmare)\b/.test(lower)) {
+                return {
+                    text: "Oh! That sounds frightening... I'm right here with you though. Take a deep breath.",
+                    emotion: 'scared'
+                };
+            }
+
+            if (/\b(sad|sorry|cry|lonely|miss|hurt|upset|depressed|awful|terrible|bad day)\b/.test(lower)) {
+                return {
+                    text: "I'm really sorry to hear that. I'm here for you — want to talk about it?",
+                    emotion: 'sad'
+                };
+            }
+
+            if (/\b(oops|awkward|embarrass|embarrassed|shy|blush|my bad|ummm)\b/.test(lower)) {
+                return {
+                    text: "Oh! Don't worry about it — we've all been there. No judgement here.",
+                    emotion: 'embarrased'
+                };
+            }
+
+            if (/\b(confus|don't understand|dont understand|what do you mean|unclear|huh|not sure)\b/.test(lower)
+                || /\?{2,}/.test(message)) {
+                return {
+                    text: "Hmm, I'm not completely sure I followed that. Could you explain a little more?",
+                    emotion: 'confused'
+                };
+            }
+
+            if (/\b(hello|hi|hey|great|awesome|amazing|love|happy|yay|thanks|thank you|good|nice|wonderful|cool|excited)\b/.test(lower)) {
+                return {
+                    text: `Hey there! I'm ${NAME}. It's lovely to hear from you.`,
+                    emotion: 'happy'
+                };
+            }
+
+            if (/\b(bye|goodbye|see you|good night)\b/.test(lower)) {
+                return {
+                    text: "Goodbye! Come back anytime — I'll be right here. 💜",
+                    emotion: 'happy'
+                };
+            }
+
+            if (/\b(who are you|your name)\b/.test(lower)) {
+                return {
+                    text: `I'm ${NAME}, your AI companion. I'm here to chat about anything you like.`,
+                    emotion: 'happy'
+                };
+            }
+
+            if (/\b(help|what can you do)\b/.test(lower)) {
+                return {
+                    text: "I can chat with you, answer questions, or just keep you company. What's on your mind?",
+                    emotion: 'happy'
+                };
+            }
+
+            const fallbacks = [
+                "That's interesting! Tell me more.",
+                "I see what you mean. What else is on your mind?",
+                "Thanks for sharing that with me. I'm listening.",
+                "Hmm, let me think about that... I'd love to hear more.",
+                "I'm here for you. What would you like to talk about?"
+            ];
+            return {
+                text: fallbacks[Math.floor(Math.random() * fallbacks.length)],
+                emotion: 'happy'
+            };
+        }
+
+        /* ============================================================
+           11. SPEECH SYNTHESIS
+           ============================================================ */
+        function speakText(text, onDone) {
+            if (!voiceEnabled || !('speechSynthesis' in window)) {
+                if (onDone) onDone();
+                return;
+            }
 
             window.speechSynthesis.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.95;
-            utterance.pitch = 1.05;
+            utterance.rate   = 0.95;
+            utterance.pitch  = 1.05;
             utterance.volume = 1;
 
             const voices = window.speechSynthesis.getVoices();
-            const preferred = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Zira'));
+            const preferred = voices.find(v =>
+                /female|samantha|zira|google uk english female/i.test(v.name)
+            );
             if (preferred) utterance.voice = preferred;
 
-            utterance.onstart = () => {
-                setCharacterState('talking');
+            let finished = false;
+            const finish = () => {
+                if (finished) return;
+                finished = true;
+                if (onDone) onDone();
             };
 
-            utterance.onend = () => {
-                if (!characterImage.classList.contains('thinking') && !characterImage.classList.contains('error')) {
-                    setCharacterState('idle');
-                }
-            };
+            utterance.onend   = finish;
+            utterance.onerror = finish;
 
-            utterance.onerror = () => {
-                setCharacterState('idle');
-            };
-
-            currentUtterance = utterance;
             window.speechSynthesis.speak(utterance);
         }
 
-        // ============================================
-        // 8. MAIN SEND MESSAGE FUNCTION
-        // ============================================
+        /* ============================================================
+           12. FINISH RESPONSE
+           ============================================================ */
+        function finishResponse() {
+            if (!isAIActive) return;
+
+            clearTimeout(safetyTimer);
+            clearTimeout(responseTimer);
+
+            setTalking(false);
+            setCharacterState('idle');
+
+            isAIActive   = false;
+            isProcessing = false;
+            sendBtn.disabled = false;
+
+            resetInactivityTimer();
+            messageInput.focus();
+        }
+
+        /* ============================================================
+           13. SEND MESSAGE
+           ============================================================ */
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text || isProcessing) return;
 
             isProcessing = true;
+            isAIActive   = true;
             sendBtn.disabled = true;
 
+            resetInactivityTimer();
+
             addMessage(text, 'user');
+
             messageInput.value = '';
             messageInput.style.height = 'auto';
 
@@ -845,24 +957,19 @@
             setCharacterState('thinking');
 
             try {
-                const aiReply = await generateAIResponse(text);
+                const reply = await generateAIResponse(text);
 
                 showTyping(false);
-                addMessage(aiReply, 'ai');
+                addMessage(reply.text, 'ai');
 
-                setCharacterState('talking');
+                setCharacterState(reply.emotion || 'happy');
+                setTalking(true);
 
-                if (voiceEnabled) {
-                    speakText(aiReply);
-                    setTimeout(() => {
-                        if (characterImage.classList.contains('talking')) {
-                            setCharacterState('idle');
-                        }
-                    }, 8000);
+                if (voiceEnabled && 'speechSynthesis' in window) {
+                    speakText(reply.text, finishResponse);
+                    safetyTimer = setTimeout(finishResponse, 15000);
                 } else {
-                    setTimeout(() => {
-                        setCharacterState('idle');
-                    }, 1200);
+                    responseTimer = setTimeout(finishResponse, 2500);
                 }
 
             } catch (error) {
@@ -870,17 +977,13 @@
                 showTyping(false);
                 setCharacterState('error');
                 addMessage('Sorry, something went wrong. Please try again.', 'ai');
-                setTimeout(() => setCharacterState('idle'), 3000);
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                messageInput.focus();
+                responseTimer = setTimeout(finishResponse, 3000);
             }
         }
 
-        // ============================================
-        // 9. WELCOME SCREEN LOGIC
-        // ============================================
+        /* ============================================================
+           14. WELCOME SCREEN
+           ============================================================ */
         function startChat() {
             welcomeScreen.classList.add('hidden');
             mainLayout.classList.remove('hidden');
@@ -890,61 +993,79 @@
             }
 
             setCharacterState('idle');
+            resetInactivityTimer();
             messageInput.focus();
         }
 
-        // ============================================
-        // 10. VOICE TOGGLE
-        // ============================================
+        /* ============================================================
+           15. VOICE TOGGLE
+           ============================================================ */
         function toggleVoice() {
             voiceEnabled = !voiceEnabled;
+
             if (voiceEnabled) {
                 voiceToggleBtn.textContent = '🔊 Voice ON';
                 voiceToggleBtn.classList.remove('off');
             } else {
                 voiceToggleBtn.textContent = '🔇 Voice OFF';
                 voiceToggleBtn.classList.add('off');
+
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                 }
-                if (characterImage.classList.contains('talking')) {
-                    setCharacterState('idle');
+
+                if (isAIActive && !characterImage.classList.contains('thinking')) {
+                    finishResponse();
                 }
             }
         }
 
-        // ============================================
-        // 11. EVENT LISTENERS
-        // ============================================
+        /* ============================================================
+           16. EVENT LISTENERS
+           ============================================================ */
         startChatBtn.addEventListener('click', startChat);
-        sendBtn.addEventListener('click', sendMessage);
+
+        sendBtn.addEventListener('click', () => {
+            resetInactivityTimer();
+            sendMessage();
+        });
+
+        messageInput.addEventListener('input', () => {
+            resetInactivityTimer();
+            autoResizeInput();
+        });
+
+        messageInput.addEventListener('focus', resetInactivityTimer);
 
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                resetInactivityTimer();
                 sendMessage();
             }
         });
 
-        messageInput.addEventListener('input', function () {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        voiceToggleBtn.addEventListener('click', () => {
+            resetInactivityTimer();
+            toggleVoice();
         });
 
-        voiceToggleBtn.addEventListener('click', toggleVoice);
-
-        // ============================================
-        // 12. INITIALIZATION
-        // ============================================
+        /* ============================================================
+           17. INITIALISATION
+           ============================================================ */
         welcomeScreen.classList.remove('hidden');
         mainLayout.classList.add('hidden');
+
         setCharacterState('idle');
+        resetInactivityTimer();
 
         if ('speechSynthesis' in window) {
             window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
         }
 
         console.log('✨ Zimelia is ready. Character config:', characterConfig);
+        console.log('🎭 Available expressions:', Object.keys(characterImages).join(', '));
     </script>
 </body>
 </html>
