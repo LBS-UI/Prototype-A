@@ -1,1 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Zimelia · AI character</title>
+    <style>
+        /* ========== RESET & VARIABLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
+        :root {
+            --bg-dark: #0b0710;
+            --bg-panel: #140f1c;
+            --primary: #a855f7;
+            --primary-glow: #c084fc;
+            --secondary: #7c3aed;
+            --accent-cyan: #67e8f9;
+            --accent-lavender: #d8b4fe;
+            --text-light: #f3e8ff;
+            --text-dim: #b9a8d4;
+            --card-radius: 24px;
+            --shadow-glow: 0 0 40px rgba(168, 85, 247, 0.25);
+            --transition: all 0.25s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 30% 20%, #1a1028, #0b0710 80%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: var(--text-light);
+        }
+
+        /* ========== APP CONTAINER ========== */
+        .app-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 95vh;
+            max-height: 900px;
+            position: relative;
+        }
+
+        /* ========== WELCOME SCREEN ========== */
+        .welcome-screen {
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(11, 7, 16, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 36px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-card {
+            background: rgba(26, 16, 40, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 40px;
+            padding: 40px 32px;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), var(--shadow-glow);
+        }
+
+        .welcome-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .welcome-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .welcome-card h2 .char-name {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .welcome-card p {
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 32px rgba(168, 85, 247, 0.7);
+        }
+
+        /* ========== MAIN LAYOUT ========== */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            height: 100%;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .main-layout.hidden {
+            display: none;
+        }
+
+        /* ========== CHARACTER PANEL ========== */
+        .character-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20, 15, 28, 0.5);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1/1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .character-glow {
+            position: absolute;
+            inset: -5%;
+            border-radius: 40px;
+            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.3), transparent 70%);
+            filter: blur(30px);
+            z-index: 0;
+            transition: opacity 0.6s, background 0.6s;
+        }
+
+        .character-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 36px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
+            z-index: 1;
+            transition: transform 0.3s, box-shadow 0.4s, filter 0.4s;
+            animation: floatIdle 5s ease-in-out infinite;
+        }
+
+        @keyframes floatIdle {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-6px) scale(1.005); }
+        }
+
+        .character-img.talking {
+            animation: talkFloat 1.2s ease-in-out infinite;
+            box-shadow: 0 0 50px var(--primary-glow), 0 20px 40px -10px black;
+        }
+        @keyframes talkFloat {
+            0%, 100% { transform: scale(1) translateY(0); }
+            30% { transform: scale(1.02) translateY(-4px); }
+            70% { transform: scale(1.01) translateY(2px); }
+        }
+
+        .character-img.thinking {
+            animation: thinkPulse 1.8s ease-in-out infinite;
+            filter: brightness(1.1) saturate(1.2);
+        }
+        @keyframes thinkPulse {
+            0%, 100% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(0.99); opacity: 1; }
+        }
+
+        .character-img.error {
+            filter: hue-rotate(-20deg) brightness(0.9);
+            box-shadow: 0 0 40px rgba(255, 80, 80, 0.6);
+            animation: errorShake 0.4s ease-in-out;
+        }
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-lavender);
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(1px);
+            animation: particleFloat 8s infinite alternate;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .p1 { top: 10%; left: 5%; animation-duration: 9s; }
+        .p2 { bottom: 15%; right: 8%; width: 10px; height: 10px; background: var(--accent-cyan); animation-duration: 11s; }
+        .p3 { top: 40%; right: 12%; width: 4px; height: 4px; animation-duration: 7s; }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            100% { transform: translate(20px, -30px) scale(1.5); opacity: 0.5; }
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 20px;
+            border-radius: 100px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            backdrop-filter: blur(8px);
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            margin-top: 8px;
+            z-index: 5;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 12px #4ade80;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .status-text {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            height: 24px;
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .audio-wave.active {
+            opacity: 1;
+        }
+        .audio-wave span {
+            display: block;
+            width: 4px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 4px;
+            animation: waveBounce 0.8s infinite ease-in-out;
+        }
+        .audio-wave span:nth-child(1) { animation-delay: 0s; height: 12px; }
+        .audio-wave span:nth-child(2) { animation-delay: 0.15s; height: 18px; }
+        .audio-wave span:nth-child(3) { animation-delay: 0.3s; height: 24px; }
+        .audio-wave span:nth-child(4) { animation-delay: 0.45s; height: 16px; }
+        .audio-wave span:nth-child(5) { animation-delay: 0.6s; height: 10px; }
+
+        @keyframes waveBounce {
+            0%, 100% { transform: scaleY(0.6); opacity: 0.6; }
+            50% { transform: scaleY(1.4); opacity: 1; }
+        }
+
+        .voice-toggle {
+            margin-top: 16px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--accent-lavender);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(4px);
+        }
+        .voice-toggle:hover {
+            background: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+        }
+        .voice-toggle.off {
+            opacity: 0.6;
+            border-color: #4b5563;
+            color: #9ca3af;
+        }
+
+        /* ========== CHAT PANEL ========== */
+        .chat-panel {
+            background: rgba(20, 15, 28, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: var(--card-radius);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px black, inset 0 0 30px rgba(168, 85, 247, 0.05);
+        }
+
+        .chat-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+            background: rgba(15, 10, 22, 0.6);
+        }
+        .chat-header h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        .chat-header h3 .char-name {
+            color: var(--accent-cyan);
+        }
+        .chat-sub {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px 20px 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            animation: messageIn 0.3s ease-out;
+        }
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 6px 14px rgba(124, 58, 237, 0.3);
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: rgba(45, 30, 65, 0.9);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: var(--text-light);
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 0 24px 8px;
+            color: var(--accent-lavender);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        .typing-indicator.visible {
+            display: flex;
+        }
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: typingBounce 1.2s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding: 16px 20px 8px;
+            border-top: 1px solid rgba(168, 85, 247, 0.2);
+            background: rgba(15, 10, 22, 0.5);
+        }
+
+        #messageInput {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 24px;
+            padding: 14px 18px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            transition: var(--transition);
+            max-height: 120px;
+            line-height: 1.5;
+        }
+        #messageInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
+        }
+        #messageInput::placeholder {
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.5);
+            flex-shrink: 0;
+        }
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 22px var(--primary-glow);
+        }
+        .send-btn:disabled {
+            opacity: 0.4;
+            transform: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .input-hint {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            padding: 0 24px 12px;
+            opacity: 0.5;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .app-container {
+                height: auto;
+                max-height: none;
+            }
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .character-panel {
+                padding: 20px 16px 16px;
+            }
+            .character-wrapper {
+                max-width: 280px;
+                aspect-ratio: 1/1;
+            }
+            .chat-panel {
+                min-height: 450px;
+            }
+            .welcome-card {
+                padding: 28px 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            .app-container {
+                border-radius: 24px;
+            }
+            .character-wrapper {
+                max-width: 220px;
+            }
+            .status-indicator {
+                font-size: 0.85rem;
+                padding: 6px 16px;
+            }
+            .chat-messages {
+                padding: 14px 12px;
+            }
+            .message {
+                max-width: 92%;
+                font-size: 0.9rem;
+                padding: 10px 14px;
+            }
+            .chat-input-area {
+                padding: 12px 12px 6px;
+            }
+            #messageInput {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+            }
+            .send-btn {
+                width: 46px;
+                height: 46px;
+                font-size: 1.2rem;
+            }
+            .voice-toggle {
+                font-size: 0.8rem;
+                padding: 6px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MAIN APP CONTAINER -->
+    <div class="app-container">
+
+        <!-- WELCOME SCREEN -->
+        <div id="welcomeScreen" class="welcome-screen">
+            <div class="welcome-card">
+                <div class="welcome-avatar">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%231a1028'/%3E%3Ccircle cx='100' cy='100' r='70' fill='%237c3aed' opacity='0.3'/%3E%3Ctext x='100' y='115' font-family='Arial' font-size='40' fill='%23c084fc' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" alt="Zimelia" class="welcome-img">
+                </div>
+                <h2>Hi! I'm <span class="char-name">Zimelia</span>.</h2>
+                <p>You can talk to me about anything.</p>
+                <button id="startChatBtn" class="btn-primary">Start Chatting</button>
+            </div>
+        </div>
+
+        <!-- MAIN LAYOUT -->
+        <div class="main-layout hidden" id="mainLayout">
+
+            <!-- LEFT: CHARACTER PANEL -->
+            <section class="character-panel">
+                <div class="character-wrapper">
+                    <div class="character-glow"></div>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='440' viewBox='0 0 400 440'%3E%3Crect width='400' height='440' fill='%231a1028' rx='36'/%3E%3Ccircle cx='200' cy='180' r='100' fill='%237c3aed' opacity='0.25'/%3E%3Ccircle cx='200' cy='180' r='70' fill='%23a855f7' opacity='0.3'/%3E%3Ctext x='200' y='210' font-family='Arial' font-size='80' fill='%23d8b4fe' text-anchor='middle' font-weight='bold'%3EZ%3C/text%3E%3Ctext x='200' y='330' font-family='Arial' font-size='22' fill='%23b9a8d4' text-anchor='middle'%3EZimelia%3C/text%3E%3C/svg%3E" alt="Zimelia character" class="character-img" id="characterImage">
+                    <div class="particle p1"></div>
+                    <div class="particle p2"></div>
+                    <div class="particle p3"></div>
+                </div>
+
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="statusText">Idle</span>
+                </div>
+
+                <div class="audio-wave" id="audioWave">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+
+                <button id="voiceToggleBtn" class="voice-toggle" title="Toggle voice output">
+                    🔊 Voice ON
+                </button>
+            </section>
+
+            <!-- RIGHT: CHAT PANEL -->
+            <section class="chat-panel">
+                <div class="chat-header">
+                    <h3><span class="char-name">Zimelia</span></h3>
+                    <span class="chat-sub">AI companion</span>
+                </div>
+
+                <div class="chat-messages" id="chatMessages"></div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>Thinking</span>
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <textarea id="messageInput" placeholder="Type a message..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-btn">➤</button>
+                </div>
+                <p class="input-hint">Press Enter to send · Shift+Enter for new line</p>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        /* ============================================
+           INTERACTIVE AI CHARACTER — ZIMELIA
+           Single-file version
+           ============================================ */
+
+        // ============================================
+        // 1. CHARACTER CONFIGURATION
+        // ============================================
+        const characterConfig = {
+            name: "Zimelia",
+            personality: "friendly, helpful, calm and slightly playful",
+            greeting: "Hello! I'm Zimelia. How can I help you today?"
+        };
+
+        // ============================================
+        // 2. DOM ELEMENTS
+        // ============================================
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const startChatBtn = document.getElementById('startChatBtn');
+        const mainLayout = document.getElementById('mainLayout');
+        const characterImage = document.getElementById('characterImage');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.querySelector('.status-dot');
+        const audioWave = document.getElementById('audioWave');
+        const voiceToggleBtn = document.getElementById('voiceToggleBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // ============================================
+        // 3. STATE VARIABLES
+        // ============================================
+        let voiceEnabled = true;
+        let isProcessing = false;
+        let currentUtterance = null;
+
+        // ============================================
+        // 4. CHARACTER STATE SYSTEM
+        // ============================================
+        function setCharacterState(state) {
+            characterImage.classList.remove('talking', 'thinking', 'error');
+            audioWave.classList.remove('active');
+
+            switch (state) {
+                case 'idle':
+                    statusText.textContent = 'Idle';
+                    statusDot.style.background = '#4ade80';
+                    statusDot.style.boxShadow = '0 0 12px #4ade80';
+                    break;
+                case 'thinking':
+                    statusText.textContent = `${characterConfig.name} is thinking...`;
+                    statusDot.style.background = '#fbbf24';
+                    statusDot.style.boxShadow = '0 0 12px #fbbf24';
+                    characterImage.classList.add('thinking');
+                    break;
+                case 'talking':
+                    statusText.textContent = `${characterConfig.name} is talking...`;
+                    statusDot.style.background = '#67e8f9';
+                    statusDot.style.boxShadow = '0 0 12px #67e8f9';
+                    characterImage.classList.add('talking');
+                    audioWave.classList.add('active');
+                    break;
+                case 'error':
+                    statusText.textContent = 'Error — something went wrong';
+                    statusDot.style.background = '#f87171';
+                    statusDot.style.boxShadow = '0 0 12px #f87171';
+                    characterImage.classList.add('error');
+                    break;
+                default:
+                    statusText.textContent = 'Idle';
+            }
+        }
+
+        // ============================================
+        // 5. CHAT FUNCTIONS
+        // ============================================
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', sender);
+            msgDiv.textContent = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping(visible) {
+            if (visible) {
+                typingIndicator.classList.add('visible');
+            } else {
+                typingIndicator.classList.remove('visible');
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ============================================
+        // 6. AI RESPONSE GENERATOR (PLACEHOLDER)
+        // ============================================
+        async function generateAIResponse(message) {
+            // ==========================================
+            // 🔌 AI API CONNECTION POINT
+            // ==========================================
+            // To connect a real AI:
+            // 1. Replace the placeholder below with a fetch() call to your backend.
+            // 2. Your backend should hold the API key and forward requests.
+            //
+            // Example:
+            // const response = await fetch('/api/chat', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ message, personality: characterConfig.personality })
+            // });
+            // const data = await response.json();
+            // return data.reply;
+            //
+            // NEVER expose secret API keys in frontend code.
+            // ==========================================
+
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const lower = message.toLowerCase();
+                    let reply = '';
+
+                    if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+                        reply = `Hey there! I'm ${characterConfig.name}. It's lovely to hear from you.`;
+                    } else if (lower.includes('how are you')) {
+                        reply = `I'm wonderful, thank you! I'm always happy to chat. How are you doing?`;
+                    } else if (lower.includes('your name') || lower.includes('who are you')) {
+                        reply = `I'm ${characterConfig.name}, your AI companion. I'm here to talk about anything you like.`;
+                    } else if (lower.includes('help')) {
+                        reply = `Of course! I can chat with you about ideas, answer questions, or just keep you company. What's on your mind?`;
+                    } else if (lower.includes('bye') || lower.includes('goodbye')) {
+                        reply = `Goodbye! Come back anytime. I'll be right here. 💜`;
+                    } else {
+                        const fallbacks = [
+                            `That's interesting! Tell me more.`,
+                            `I see what you mean. What else is on your mind?`,
+                            `Thanks for sharing that with me. I'm listening.`,
+                            `Hmm, let me think about that... I'd love to hear more.`,
+                            `I'm here for you. What would you like to talk about?`
+                        ];
+                        reply = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                    }
+
+                    resolve(reply);
+                }, 800 + Math.random() * 600);
+            });
+        }
+
+        // ============================================
+        // 7. VOICE (SPEECH SYNTHESIS)
+        // ============================================
+        function speakText(text) {
+            if (!voiceEnabled) return;
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            utterance.pitch = 1.05;
+            utterance.volume = 1;
+
+            const voices = window.speechSynthesis.getVoices();
+            const preferred = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Zira'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                setCharacterState('talking');
+            };
+
+            utterance.onend = () => {
+                if (!characterImage.classList.contains('thinking') && !characterImage.classList.contains('error')) {
+                    setCharacterState('idle');
+                }
+            };
+
+            utterance.onerror = () => {
+                setCharacterState('idle');
+            };
+
+            currentUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // ============================================
+        // 8. MAIN SEND MESSAGE FUNCTION
+        // ============================================
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text || isProcessing) return;
+
+            isProcessing = true;
+            sendBtn.disabled = true;
+
+            addMessage(text, 'user');
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+
+            showTyping(true);
+            setCharacterState('thinking');
+
+            try {
+                const aiReply = await generateAIResponse(text);
+
+                showTyping(false);
+                addMessage(aiReply, 'ai');
+
+                setCharacterState('talking');
+
+                if (voiceEnabled) {
+                    speakText(aiReply);
+                    setTimeout(() => {
+                        if (characterImage.classList.contains('talking')) {
+                            setCharacterState('idle');
+                        }
+                    }, 8000);
+                } else {
+                    setTimeout(() => {
+                        setCharacterState('idle');
+                    }, 1200);
+                }
+
+            } catch (error) {
+                console.error('AI response error:', error);
+                showTyping(false);
+                setCharacterState('error');
+                addMessage('Sorry, something went wrong. Please try again.', 'ai');
+                setTimeout(() => setCharacterState('idle'), 3000);
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        // ============================================
+        // 9. WELCOME SCREEN LOGIC
+        // ============================================
+        function startChat() {
+            welcomeScreen.classList.add('hidden');
+            mainLayout.classList.remove('hidden');
+
+            if (chatMessages.children.length === 0) {
+                addMessage(characterConfig.greeting, 'ai');
+            }
+
+            setCharacterState('idle');
+            messageInput.focus();
+        }
+
+        // ============================================
+        // 10. VOICE TOGGLE
+        // ============================================
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            if (voiceEnabled) {
+                voiceToggleBtn.textContent = '🔊 Voice ON';
+                voiceToggleBtn.classList.remove('off');
+            } else {
+                voiceToggleBtn.textContent = '🔇 Voice OFF';
+                voiceToggleBtn.classList.add('off');
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                }
+                if (characterImage.classList.contains('talking')) {
+                    setCharacterState('idle');
+                }
+            }
+        }
+
+        // ============================================
+        // 11. EVENT LISTENERS
+        // ============================================
+        startChatBtn.addEventListener('click', startChat);
+        sendBtn.addEventListener('click', sendMessage);
+
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        messageInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        voiceToggleBtn.addEventListener('click', toggleVoice);
+
+        // ============================================
+        // 12. INITIALIZATION
+        // ============================================
+        welcomeScreen.classList.remove('hidden');
+        mainLayout.classList.add('hidden');
+        setCharacterState('idle');
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+        }
+
+        console.log('✨ Zimelia is ready. Character config:', characterConfig);
+    </script>
+</body>
+</html>
